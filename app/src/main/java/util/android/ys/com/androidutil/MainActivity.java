@@ -18,16 +18,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.Btn1, R.id.Btn2, R.id.Btn3})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.Btn1:
-                break;
-            case R.id.Btn2:
-                break;
-            case R.id.Btn3:
-                break;
-        }
-    }
+//    @OnClick({R.id.Btn1, R.id.Btn2, R.id.Btn3})
+//    public void onViewClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.Btn1:
+//                break;
+//            case R.id.Btn2:
+//                break;
+//            case R.id.Btn3:
+//                break;
+//        }
+//    }
 
 }
