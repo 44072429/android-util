@@ -34,6 +34,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // butterknife
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+//    compile 'com.jakewharton:butterknife:8.4.0'
+
 }
