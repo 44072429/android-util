@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
             String obj = (String) msg.obj;
             switch (msg.what) {
                 case 1:
+
                     Toast.makeText(MainActivity.this, obj, Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
