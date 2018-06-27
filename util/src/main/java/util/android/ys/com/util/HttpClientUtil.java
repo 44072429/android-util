@@ -247,6 +247,7 @@ public class HttpClientUtil {
 
             // URL使用基本URL即可，其中不需要加参数
             HttpPost httpPost = new HttpPost(url);
+            httpPost.addHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
 
             // 将请求体内容加入请求中
             httpPost.setEntity(requestHttpEntity);
@@ -269,12 +270,14 @@ public class HttpClientUtil {
 //            ClientConnectionManager ccm = new PoolingClientConnectionManager(registry);
 
             // 需要客户端对象来发送请求
-            BasicHttpParams httpParams = new BasicHttpParams();
-            HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(httpParams, "utf-8");
-            httpParams.setBooleanParameter("http.protocol.expect-continue", false);
+//            BasicHttpParams httpParams = new BasicHttpParams();
+//            HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
+//            HttpProtocolParams.setContentCharset(httpParams, "utf-8");
+//            httpParams.setBooleanParameter("http.protocol.expect-continue", false);
+//            HttpClient httpClient = new DefaultHttpClient(httpParams);
 
-            HttpClient httpClient = new DefaultHttpClient(httpParams);
+            HttpClient httpClient = new DefaultHttpClient();
+
             // 发送请求
             HttpResponse response = httpClient.execute(httpPost);
 
