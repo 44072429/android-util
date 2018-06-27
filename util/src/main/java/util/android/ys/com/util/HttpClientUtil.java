@@ -23,6 +23,7 @@ import javax.net.ssl.SSLSocketFactory;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.HttpVersion;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.config.RequestConfig;
@@ -39,6 +40,9 @@ import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.impl.conn.PoolingClientConnectionManager;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.params.BasicHttpParams;
+import cz.msebera.android.httpclient.params.HttpParams;
+import cz.msebera.android.httpclient.params.HttpProtocolParams;
 import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
@@ -235,17 +239,17 @@ public class HttpClientUtil {
                 pairList.add(new BasicNameValuePair(param.getKey(),param.getValue()));
             }
 
-//            HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
+            HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
 
-            StringEntity stringEntity = new StringEntity(pairList.toString());
-            stringEntity.setContentEncoding("UTF-8");
+//            StringEntity stringEntity = new StringEntity(pairList.toString());
+//            stringEntity.setContentEncoding("UTF-8");
 
 
             // URL使用基本URL即可，其中不需要加参数
             HttpPost httpPost = new HttpPost(url);
 
             // 将请求体内容加入请求中
-            httpPost.setEntity(stringEntity);
+            httpPost.setEntity(requestHttpEntity);
 
             RequestConfig config=RequestConfig.custom()
                              .setConnectTimeout(5000)       // 设置连接超时时间 5秒钟
@@ -265,7 +269,12 @@ public class HttpClientUtil {
 //            ClientConnectionManager ccm = new PoolingClientConnectionManager(registry);
 
             // 需要客户端对象来发送请求
-            HttpClient httpClient = new DefaultHttpClient();
+            BasicHttpParams httpParams = new BasicHttpParams();
+            HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
+            HttpProtocolParams.setContentCharset(httpParams, "utf-8");
+            httpParams.setBooleanParameter("http.protocol.expect-continue", false);
+
+            HttpClient httpClient = new DefaultHttpClient(httpParams);
             // 发送请求
             HttpResponse response = httpClient.execute(httpPost);
 
