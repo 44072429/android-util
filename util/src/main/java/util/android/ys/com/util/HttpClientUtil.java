@@ -13,9 +13,12 @@ import java.io.FileNotFoundException;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
@@ -25,9 +28,18 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.config.RequestConfig;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.conn.ClientConnectionManager;
 import cz.msebera.android.httpclient.conn.ConnectTimeoutException;
+import cz.msebera.android.httpclient.conn.scheme.Scheme;
+import cz.msebera.android.httpclient.conn.scheme.SchemeRegistry;
+import cz.msebera.android.httpclient.conn.ssl.TrustStrategy;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.entity.mime.HttpMultipartMode;
+import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.impl.conn.PoolingClientConnectionManager;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
@@ -223,17 +235,34 @@ public class HttpClientUtil {
                 pairList.add(new BasicNameValuePair(param.getKey(),param.getValue()));
             }
 
-            HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
+//            HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
+
+            StringEntity stringEntity = new StringEntity(pairList.toString());
+            stringEntity.setContentEncoding("UTF-8");
+
+
             // URL使用基本URL即可，其中不需要加参数
             HttpPost httpPost = new HttpPost(url);
+
             // 将请求体内容加入请求中
-            httpPost.setEntity(requestHttpEntity);
+            httpPost.setEntity(stringEntity);
 
             RequestConfig config=RequestConfig.custom()
                              .setConnectTimeout(5000)       // 设置连接超时时间 5秒钟
                              .setSocketTimeout(5000)        // 设置读取超时时间5秒钟
                              .build();
             httpPost.setConfig(config);
+
+//            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//            builder.setCharset(Charset.forName(HTTP.UTF_8));//设置请求的编码格式
+//            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//设置浏览器兼容模式
+
+//            TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
+//            SSLSocketFactory sf = new SSLSocketFactory(
+//                    acceptingTrustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+//            SchemeRegistry registry = new SchemeRegistry();
+//            registry.register(new Scheme("https", 8443, sf));
+//            ClientConnectionManager ccm = new PoolingClientConnectionManager(registry);
 
             // 需要客户端对象来发送请求
             HttpClient httpClient = new DefaultHttpClient();
